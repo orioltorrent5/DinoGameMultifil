@@ -8,19 +8,19 @@ import java.util.Observable;
 public class Metorit extends Observable implements Runnable{
 
     private String nombre;
-    private int posicionY = 0;
+    private Posicio posicions = new Posicio(0, 0);
+    private final ImageView imageView = new ImageView("https://i.imgur.com/EK2sGjw.png");
 
     public Metorit(String _nombre){
         this.nombre = _nombre;
     }
 
-
-    public int getPosicionY() {
-        return posicionY;
+    public Posicio getPosicions() {
+        return posicions;
     }
 
-    public void setPosicionY(int posicionY) {
-        this.posicionY = posicionY;
+    public void setPosicions(Posicio posicions) {
+        this.posicions = posicions;
     }
 
     public String getNombre() {
@@ -31,27 +31,47 @@ public class Metorit extends Observable implements Runnable{
         this.nombre = nombre;
     }
 
-
-    //Run amb el moviment dels cavalls
     public void run(){
-        int numAleatori;
+        int numAleatoriY;
+        int posicionY = 0;
+        int aleatoriX = generarAleatori(1, 399);
+
         try {
-            while (this.posicionY < 450){
-                numAleatori = generarAleatori(7, 10);
-                this.posicionY += numAleatori;
-                this.setChanged();
-                this.notifyObservers(this.posicionY);
-                this.clearChanged();
-                Thread.sleep(50);
+            posicions.setPosicioX(aleatoriX);
+
+            boolean repetir = true;
+            while (repetir){
+                if (this.posicions.getPosicioY() <= 450){
+                    numAleatoriY = generarAleatori(4, 8);
+                    posicionY += numAleatoriY;
+
+                    this.posicions.setPosicioY(posicionY);
+
+                    setChanged();
+                    notifyObservers(this.posicions);
+                    clearChanged();
+                    Thread.sleep(55);
+                }else
+                {
+                    this.posicions.setPosicioY(0);
+                    posicionY = 0;
+                    setChanged();
+                    notifyObservers(this.posicions);
+                    clearChanged();
+                }
+
             }
+
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
+
 
     //Generació del moviment de forma aleatoria
     public static int generarAleatori(int minimo, int maximo){
         int num = (int) Math.floor(Math.random() * (maximo - minimo + 1) + (minimo));
         return num;
     }
+
 }
