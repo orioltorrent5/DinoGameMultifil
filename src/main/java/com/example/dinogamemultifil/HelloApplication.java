@@ -33,7 +33,7 @@ public class HelloApplication extends Application implements Observer {
     private Thread[] fils = new Thread[6];
     Image dinoImage = new Image("https://i.imgur.com/EK2sGjw.png");
     Image metoritImage = new Image("https://i.imgur.com/pppQ6wV.png");
-    Alert alert = new Alert(Alert.AlertType.INFORMATION, "HAS PERDUT!!", ButtonType.OK);
+    Alert alert = new Alert(Alert.AlertType.WARNING, "HAS PERDUT!!", ButtonType.OK);
 
     public static void main(String[] args) {
         launch(args);
@@ -152,12 +152,12 @@ public class HelloApplication extends Application implements Observer {
                 scoreLabel.setText(punt);
 
                 if (perdut){
-                    alert.show();
                     System.exit(0);
                 }
             }
         };
         animationTimer.start();
+
 
     }
 
